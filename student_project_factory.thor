@@ -1,47 +1,43 @@
 #require 'rails/generators/actions'
 
-class StudentProjectsFactory < Thor
+class StudentProjectFactory < Thor
   include Thor::Actions
 
-  desc "create TEAM_NAME PROJECT", "create a team project"      
+  desc "create TEAM_NAME PROJECT", "create a team project"
   # This creates directory shell, and then does the heavy lifting in the next method
-  def create(name, project) 
+  def create(name, project)
     project_directory = "Fall-2011-FSE-" + name
 #    yes? "We're going to create a project called " + project_directory + " (press return)"
-    empty_directory project_directory                                   
-	run "cd " + project_directory  + "; thor student_projects_factory:create_project " + name + " " + project
+    empty_directory project_directory
+    run "cd " + project_directory + "; thor student_project_factory:create_project " + name + " " + project
 
   end
 
   desc "create_project TEAM_NAME", "create a team project"
-  def create_project(name, project) 
-    run "git init"             
-	run "rails _3.0.9_ " + project
+
+  def create_project(name, project)
+    run "git init"
+    run "rails _3.0.9_ " + project
     run "mv " + project + "/* ."
     remove_dir project
-    create_git_file 
+    update_git_file
+    run "git add ."
+    run "git commit -m 'Adding in initial repo'"
+#    run "git remote add origin git"
   end
-     
-  protected
-  def create_git_file
-    create_file ".gitignore"
-    append_to_file ""                    
-	# .bundle
-	# .gems
-	# .gems_old
-	# Gemfile.lock
-	# 
-	# config/database.yml
-	# 
-	# doc/coverage/*
-	# coverage/*
-	# log/*
-	# nbproject/*
-	# .idea/*
-	# tmp/*
-	# 
-	# *DS_Store
 
+
+
+  protected
+  def update_git_file
+    create_file ".gitignore"
+    append_to_file ".gitignore" do
+      ".idea/* \n" +
+      "coverage/* \n" +
+      "doc/coverage/* \n" +
+      "tmp/* \n" +
+      "*DS_Store \n"
+    end
   end
 
 
