@@ -1,31 +1,38 @@
 #require 'rails/generators/actions'
 
+# Fall 2012 - next time, switch name and proejct
+#
+
+#  thor student_project_factory:create PET Mavericks 
+
 class StudentProjectFactory < Thor
   include Thor::Actions
 
   @@course = "FSE"
 
-  desc "create TEAM_NAME PROJECT", "create a team project"
+  desc "create PROJECT, TEAM_NAME", "create a team project"
   # This creates directory shell, and then does the heavy lifting in the next method
-  def create(name, project)
+  def create(project, name)
     project_directory = "Fall-2011-" + @@course + "-" + name
 #    yes? "We're going to create a project called " + project_directory + " (press return)"
     empty_directory project_directory
-    run "cd " + project_directory + "; thor student_project_factory:create_project " + name + " " + project
+    run "cd " + project_directory + "; thor student_project_factory:create_project " + project + " " + name
+    say "------------------------------"
     say "Finished with " + project_directory
+    say "------------------------------"
     say "bundle install"
     say "rails generate jquery:install"
     say "script/rails generate rspec:install"
     say "rake db:migrate"
-    run "git add ."
-    run "git commit -m 'Adding in jquery and rspec'"
+    say "git add ."
+    say "git commit -m 'Adding in jquery and rspec'"
     say "git remote add origin git@github.com:cmusv/" + project_directory + ".git"
     say "git push origin master"
   end
 
   desc "create_project TEAM_NAME", "create a team project"
 
-  def create_project(name, project)
+  def create_project(project, name)
     project_directory = "Fall-2011-" + @@course + "-" + name
     run "git init"
     run "rails new " + project + " -v 3.0.9 --skip-testunit --skip-prototype"
