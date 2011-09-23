@@ -3,12 +3,14 @@
 # Fall 2012 - next time, switch name and proejct
 #
 
-#  thor student_project_factory:create PET Mavericks 
+# make a done directory
+# thor student_project_factory:create PET Mavericks
+# thor student_project_factory:create BestBay Business-As-Usual
 
 class StudentProjectFactory < Thor
   include Thor::Actions
 
-  @@course = "FSE"
+  @@course = "ISE"
 
   desc "create PROJECT, TEAM_NAME", "create a team project"
   # This creates directory shell, and then does the heavy lifting in the next method
@@ -20,6 +22,8 @@ class StudentProjectFactory < Thor
     say "------------------------------"
     say "Finished with " + project_directory
     say "------------------------------"
+    say "cd " + project_directory
+    say "----- yes! to rvm"
     say "bundle install"
     say "rails generate jquery:install"
     say "script/rails generate rspec:install"
@@ -28,6 +32,9 @@ class StudentProjectFactory < Thor
     say "git commit -m 'Adding in jquery and rspec'"
     say "git remote add origin git@github.com:cmusv/" + project_directory + ".git"
     say "git push origin master"
+    say "cd .."
+    say "mv " + project_directory + " done"
+    say "------------------------------"
   end
 
   desc "create_project TEAM_NAME", "create a team project"
