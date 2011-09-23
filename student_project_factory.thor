@@ -3,12 +3,13 @@
 # Fall 2012 - next time, switch name and proejct
 #
 
-#  thor student_project_factory:create PET Mavericks 
+# thor student_project_factory:create PET Mavericks
+# thor student_project_factory:create BestBay Business-As-Usual
 
 class StudentProjectFactory < Thor
   include Thor::Actions
 
-  @@course = "FSE"
+  @@course = "ISE"
 
   desc "create PROJECT, TEAM_NAME", "create a team project"
   # This creates directory shell, and then does the heavy lifting in the next method
