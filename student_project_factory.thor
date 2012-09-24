@@ -1,8 +1,11 @@
 #require 'rails/generators/actions'
 
 # Fall 2012 - next time, switch name and proejct
-#
+#                         
+# next time, create lib/tasks/build_machine.rake
+# next time, create goldberg_config file
 
+# make a done directory
 # thor student_project_factory:create PET Mavericks
 # thor student_project_factory:create BestBay Business-As-Usual
 
@@ -21,6 +24,8 @@ class StudentProjectFactory < Thor
     say "------------------------------"
     say "Finished with " + project_directory
     say "------------------------------"
+    say "cd " + project_directory
+    say "----- yes! to rvm"
     say "bundle install"
     say "rails generate jquery:install"
     say "script/rails generate rspec:install"
@@ -29,6 +34,9 @@ class StudentProjectFactory < Thor
     say "git commit -m 'Adding in jquery and rspec'"
     say "git remote add origin git@github.com:cmusv/" + project_directory + ".git"
     say "git push origin master"
+    say "cd .."
+    say "mv " + project_directory + " done"
+    say "------------------------------"
   end
 
   desc "create_project TEAM_NAME", "create a team project"
@@ -42,7 +50,7 @@ class StudentProjectFactory < Thor
     update_gemfile
     update_git_file
     create_rvmrc
-    modify_readme_with_build_status project_directory
+    modify_readme_with_build_status name
     rename_readme
     run "git add ."
     run "git commit -m 'Adding in initial repo'"
@@ -57,6 +65,7 @@ class StudentProjectFactory < Thor
       ".bundle\n" +
       "db/*.sqlite3\n" +
       "log/*.log\n" +
+      "webrat.log\n" +
       "tmp/\n"+
       ".idea/*\n" +
       "coverage/*\n" +
@@ -92,24 +101,26 @@ class StudentProjectFactory < Thor
     run "mv README README.md"
   end
 
-  def modify_readme_with_build_status(project_directory)
+  def modify_readme_with_build_status(team_name)
     insert_into_file "README", :after => "== Welcome to Rails" do
-      "\n     <a href='http://cruise.sv.cmu.edu:3000/projects/#{project_directory}'><img src='http://cruise.sv.cmu.edu:3000/projects/#{project_directory}.png' alt='Build Status'></a> \n "
+      "\n     <a href='http://cruise.sv.cmu.edu:3333/projects/#{team_name}'><img src='http://cruise.sv.cmu.edu:3333/projects/#{team_name}.png' alt='Build Status'></a> \n "
     end
 
   end
 
 
-#  RAILS_ENV=production bin/goldberg add git@github.com:cmusv/Fall-2011-FSE-Mavericks.git Fall-2011-FSE-Mavericks
-# RAILS_ENV=production bin/goldberg add https://professor@github.com/cmusv/Fall-2011-FSE-Mavericks.git Fall-2011-FSE-Mavericks
+#   RAILS_ENV=production bin/goldberg add git@github.com:cmusv/Fall-2011-FSE-Alpha-and-Omega.git Alpha-and-Omega
+
+#  RAILS_ENV=production bin/goldberg add git@github.com:cmusv/Fall-2011-FSE-Mavericks.git Mavericks
+# RAILS_ENV=production bin/goldberg add https://professor@github.com/cmusv/Fall-2011-FSE-Mavericks.git Mavericks
 #
 # On server
 # cd goldberg
-# RAILS_ENV=production rails server
+# RAILS_ENV=production rails server --port 3333
   # god -c config/god-script.rb -D
 # RAILS_ENV="production"  bin/goldberg start_poller
 
-
+# RAILS_ENV=production bin/goldberg remove PROJECT
 end
 
 
