@@ -5,15 +5,17 @@
 # next time, create lib/tasks/build_machine.rake
 # next time, create goldberg_config file
 
+# Script....that will create a project in the root directoyr and move to done when done!
 # mkdir done
-# cd done
 # thor student_project_factory:create PET Mavericks
 # thor student_project_factory:create BestBay Business-As-Usual
 
 class StudentProjectFactory < Thor
   include Thor::Actions
 
-  @@course = "ISE"
+#  @@course = "96821" #ISE
+#  @@course = "96700" #FSE
+  @@course = "18642" #ECE
   @@year = "2012"
 
   desc "create PROJECT, TEAM_NAME", "create a team project"
@@ -111,7 +113,8 @@ class StudentProjectFactory < Thor
 
   def modify_readme_with_build_status(team_name)
     insert_into_file "README.rdoc", :after => "== Welcome to Rails" do
-      "\n     <a href='http://cruise.sv.cmu.edu:3333/projects/#{team_name}'><img src='http://cruise.sv.cmu.edu:3333/projects/#{team_name}.png' alt='Build Status'></a> \n "
+       ""
+#      "\n     <a href='http://cruise.sv.cmu.edu:3333/projects/#{team_name}'><img src='http://cruise.sv.cmu.edu:3333/projects/#{team_name}.png' alt='Build Status'></a> \n "
     end
 
   end
