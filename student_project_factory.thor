@@ -5,7 +5,8 @@
 # next time, create lib/tasks/build_machine.rake
 # next time, create goldberg_config file
 
-# make a done directory
+# mkdir done
+# cd done
 # thor student_project_factory:create PET Mavericks
 # thor student_project_factory:create BestBay Business-As-Usual
 
@@ -13,11 +14,12 @@ class StudentProjectFactory < Thor
   include Thor::Actions
 
   @@course = "ISE"
+  @@year = "2012"
 
   desc "create PROJECT, TEAM_NAME", "create a team project"
   # This creates directory shell, and then does the heavy lifting in the next method
   def create(project, name)
-    project_directory = "Fall-2011-" + @@course + "-" + name
+    project_directory = "Fall-" + @@year + "-" + @@course + "-" + name
 #    yes? "We're going to create a project called " + project_directory + " (press return)"
     empty_directory project_directory
     run "cd " + project_directory + "; thor student_project_factory:create_project " + project + " " + name
@@ -27,11 +29,10 @@ class StudentProjectFactory < Thor
     say "cd " + project_directory
     say "----- yes! to rvm"
     say "bundle install"
-    say "rails generate jquery:install"
     say "script/rails generate rspec:install"
     say "rake db:migrate"
     say "git add ."
-    say "git commit -m 'Adding in jquery and rspec'"
+    say "git commit -m 'Adding in rspec'"
     say "git remote add origin git@github.com:cmusv/" + project_directory + ".git"
     say "git push origin master"
     say "cd .."
@@ -40,12 +41,12 @@ class StudentProjectFactory < Thor
   end
 
   desc "create_project TEAM_NAME", "create a team project"
-
   def create_project(project, name)
-    project_directory = "Fall-2011-" + @@course + "-" + name
+    project_directory = "Fall-" + @@year + "-" + @@course + "-" + name
     run "git init"
-    run "rails new " + project + " -v 3.0.9 --skip-testunit --skip-prototype"
+    run "rails new " + project + " -v 3.2.7 --skip-test-unit"
     run "mv " + project + "/* ."
+    run "mv " + project + "/.[^.]* ." #Move .files
     remove_dir project
     update_gemfile
     update_git_file
@@ -60,28 +61,38 @@ class StudentProjectFactory < Thor
 
   protected
   def update_git_file
-    create_file ".gitignore"
+#    create_file ".gitignore"
     append_to_file ".gitignore" do
-      ".bundle\n" +
-      "db/*.sqlite3\n" +
-      "log/*.log\n" +
+      "\n" +
+#      ".bundle\n" +
+#      "db/*.sqlite3\n" +
+#      "log/*.log\n" +
+#      "tmp/\n"+
+#      "tmp/*\n" +
       "webrat.log\n" +
-      "tmp/\n"+
       ".idea/*\n" +
       "coverage/*\n" +
       "doc/coverage/*\n" +
-      "tmp/*\n" +
       "*DS_Store\n" +
-      ".rspec\n" +
-      ".bundle\n"
+      ".rspec\n"
     end
   end
 
   def update_gemfile
+    insert_into_file "Gemfile", :before => "gem 'sqlite3'", do
+      "group :development, :test do\n   "
+    end
+    insert_into_file "Gemfile", :after => "gem 'sqlite3'", do
+      "\n" +
+      "end\n" +
+      "\n" +
+      "group :production do\n" +
+      "  gem 'pg'\n" +
+      "end\n"
+    end
     append_to_file "Gemfile" do
       "\n"+
       "#suggested gems by Todd\n" +
-      "gem 'jquery-rails', '>= 1.0.3'\n" +
       "gem 'factory_girl_rails' \n" +
       "gem 'rspec-rails' \n" +
       "gem 'devise' \n" +
@@ -89,23 +100,24 @@ class StudentProjectFactory < Thor
       "gem 'ruby-debug-base19x' \n" +
       "gem 'ruby-debug-ide' #'0.4.6' \n"
     end
+
   end
 
   def create_rvmrc
     create_file ".rvmrc" do
-      "rvm --create use ruby-1.9.2-p180@cmucourse\n"
+      "rvm --create use ruby-1.9.3-p194@cmucourse\n"
     end
-  end
-
-  def rename_readme
-    run "mv README README.md"
   end
 
   def modify_readme_with_build_status(team_name)
-    insert_into_file "README", :after => "== Welcome to Rails" do
+    insert_into_file "README.rdoc", :after => "== Welcome to Rails" do
       "\n     <a href='http://cruise.sv.cmu.edu:3333/projects/#{team_name}'><img src='http://cruise.sv.cmu.edu:3333/projects/#{team_name}.png' alt='Build Status'></a> \n "
     end
 
+  end
+
+  def rename_readme
+    run "mv README.rdoc README.md"
   end
 
 
