@@ -5,7 +5,7 @@ Project.configure do |config|
     config.rake_task = 'continuous_integration'
     config.environment_variables = {'RAILS_ENV' => 'test'}
 
-  from = "build.machine@sv.cmu.edu"
+    from = "build.machine@sv.cmu.edu"
 
   config.on_build_completion do |build,notification,previous_build_status|
     puts "################ call back in goldberg_config.rb on_build_completion"
