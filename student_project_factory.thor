@@ -98,9 +98,11 @@ class StudentProjectFactory < Thor
       "gem 'factory_girl_rails' \n" +
       "gem 'rspec-rails' \n" +
       "gem 'devise' \n" +
-      "gem 'ruby-debug19' \n" +
-      "gem 'ruby-debug-base19x' \n" +
-      "gem 'ruby-debug-ide' #'0.4.6' \n"
+      "group :development do\n" +
+      "  gem 'ruby-debug19' \n" +
+      "  gem 'ruby-debug-base19x' \n" +
+      "  gem 'ruby-debug-ide' #'0.4.6' \n" +
+      "end\n"
     end
 
   end
