@@ -4,6 +4,7 @@ Project.configure do |config|
     config.use_bundle_exec = true                             # Run 'bundle exec rake', recommended for Rails projects
     config.rake_task = 'continuous_integration'
     config.environment_variables = {'RAILS_ENV' => 'test'}
+    config.bundler_options = '--without development'
 
     from = "build.machine@sv.cmu.edu"
 

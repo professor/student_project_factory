@@ -20,7 +20,7 @@ class GoldbergProjectFactory < Thor
     goldberg_project_file = goldberg_project_directory + team_name + "/code/goldberg_config.rb"
 
     copy_file "goldberg_config.rb", goldberg_project_file
-    copy_file "build_machine.rake", goldberg_project_directory + "code/lib/tasks/build_machine.rake"
+    copy_file "build_machine.rake", goldberg_project_directory + team_name + "/code/lib/tasks/build_machine.rake"
     insert_into_file goldberg_project_file, :before => "    from = " do
     # append_to_file goldberg_project_file do
       "\n" +
